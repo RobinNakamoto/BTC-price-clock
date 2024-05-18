@@ -1,0 +1,21 @@
+{
+    "name": "BTC Price Clock",
+    "short_name": "BTC Clock",
+    "start_url": "/BTC-price-clock/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "/BTC-price-clock/icons/icon-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/BTC-price-clock/icons/icon-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+  }
+  

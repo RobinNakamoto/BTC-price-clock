@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC Clock</title>
+    <link rel="apple-touch-icon" sizes="60x60" href="/BTC-price-clock/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/BTC-price-clock/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/BTC-price-clock/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/BTC-price-clock/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/BTC-price-clock/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/BTC-price-clock/icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/BTC-price-clock/icons/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/BTC-price-clock/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/BTC-price-clock/icons/favicon-16x16.png">
+    <link rel="manifest" href="/BTC-price-clock/icons/site.webmanifest">
+    <link rel="mask-icon" href="/BTC-price-clock/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/BTC-price-clock/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/BTC-price-clock/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+        body {
+            margin: 0;
+            background-color: black;
+            font-family: 'Roboto', Arial, sans-serif;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: column;
+            text-align: center;
+        }
+        #price {
+            font-size: 30vw; /* Fixed font size for price */
+            margin: 0;
+            color: #45C482; /* Adjusted color for price */
+        }
+    </style>
+</head>
+<body>
+    <div id="price">Loading...</div>
+    <script src="renderer.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/BTC-price-clock/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
