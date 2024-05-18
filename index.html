@@ -28,22 +28,16 @@
       overflow: hidden;
       flex-direction: column;
       text-align: center;
-      display: flex;
     }
-    #quote, #price {
-      font-size: 6vw;
+    #price {
+      font-size: 30vw; /* Fixed font size for price */
       margin: 0;
-      color: #45C482;
-      display: none;
-    }
-    #quote {
-      display: block;
+      color: #45C482; /* Adjusted color for price */
     }
   </style>
 </head>
 <body>
-  <div id="quote">If you don’t believe it or don’t get it, I don’t have the time to try to convince you, sorry.</div>
-  <div id="price"></div>
+  <div id="price">If you don’t believe it or don’t get it, I don’t have the time to try to convince you, sorry.</div>
   <script src="renderer.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
@@ -56,11 +50,6 @@
         });
       });
     }
-    // Display the quote for 1 second before showing the price
-    setTimeout(() => {
-      document.getElementById('quote').style.display = 'none';
-      document.getElementById('price').style.display = 'block';
-    }, 1000);
   </script>
 </body>
 </html>
