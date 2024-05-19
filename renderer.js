@@ -18,6 +18,9 @@ async function fetchPrice() {
         // Format the price with commas
         const formattedPrice = price.toLocaleString();
 
+        // Set price color to white
+        priceElement.style.color = 'white';
+
         priceElement.textContent = formattedPrice;
         lastPrice = price;
 
