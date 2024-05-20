@@ -18,8 +18,16 @@ async function fetchPrice() {
         // Format the price with commas
         const formattedPrice = price.toLocaleString();
 
-        // Set price color to white
-        priceElement.style.color = 'white';
+        // Update the color based on price movement
+        if (lastPrice !== null) {
+            if (price > lastPrice) {
+                priceElement.style.color = 'rgb(69, 151, 130)'; // Custom green color
+            } else if (price < lastPrice) {
+                priceElement.style.color = 'rgb(223, 72, 76)'; // Custom red color
+            } else {
+                priceElement.style.color = 'rgb(69, 151, 130)'; // Custom green color
+            }
+        }
 
         priceElement.textContent = formattedPrice;
         lastPrice = price;
