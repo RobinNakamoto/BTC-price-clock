@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTC Clock</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/BTC-price-clock/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/BTC-price-clock/icons/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/BTC-price-clock/icons/android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/BTC-price-clock/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/BTC-price-clock/icons/favicon-16x16.png">
+  <link rel="manifest" href="/BTC-price-clock/manifest.json">
+  <link rel="mask-icon" href="/BTC-price-clock/icons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/BTC-price-clock/icons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="/BTC-price-clock/icons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+    body {
+      margin: 0;
+      background-color: black;
+      font-family: 'Roboto', Arial, sans-serif;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      flex-direction: column;
+      text-align: center;
+    }
+    #price {
+      font-size: 32vw;
+      margin: -76px;
+      color: #45C482;
+    }
+    /* Timer frame styling */
+    #timer-frame {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border: 1px solid #45C482;
+      border-radius: 5px;
+      cursor: move;
+      resize: both;
+      overflow: hidden;
+      z-index: 1000;
+    }
+    #timer {
+      color: #45C482;
+      font-size: 5vw;
+      font-family: 'Roboto', Arial, sans-serif;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="price">Loading...</div>
+
+  <!-- Timer frame -->
+  <div id="timer-frame">
+    <div id="timer">00:00:00</div>
+  </div>
+
+  <script src="renderer.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/BTC-price-clock/service-worker.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, error => {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+      });
+    }
+
+    // Timer script
+    function updateTimer() {
+      const now = new Date();
+      const targetTime = new Date(now);
+      targetTime.setHours(16, 30, 0, 0); // Set target time to 16:30 BST
+
+      if (now > targetTime) {
+        targetTime.setDate(now.getDate() + 1); // Move to next day if past target
+      }
+
+      const timeDifference = targetTime - now;
+
+      const hours = String(Math.floor(timeDifference / (1000 * 60 * 60))).padStart(2, '0');
+      const minutes = String(Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      const seconds = String(Math.floor((timeDifference % (1000 * 60)) / 1000)).padStart(2, '0');
+
+      document.getElementById('timer').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateTimer, 1000);
+
+    // Make timer draggable
+    const timerFrame = document.getElementById('timer-frame');
+    timerFrame.onmousedown = function(event) {
+      event.preventDefault();
+      let shiftX = event.clientX - timerFrame.getBoundingClientRect().left;
+      let shiftY = event.clientY - timerFrame.getBoundingClientRect().top;
+
+      function moveAt(pageX, pageY) {
+        timerFrame.style.left = pageX - shiftX + 'px';
+        timerFrame.style.top = pageY - shiftY + 'px';
+      }
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      timerFrame.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        timerFrame.onmouseup = null;
+      };
+    };
+
+    timerFrame.ondragstart = function() {
+      return false;
+    };
+  </script>
+</body>
+</html>
