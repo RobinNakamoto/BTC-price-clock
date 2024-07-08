@@ -7,7 +7,7 @@ let lastPrice = null;
 
 async function fetchPrice() {
     try {
-        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCFDUSD');
+        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
         const data = await response.json();
         let price = parseFloat(data.price);
 
