@@ -1,43 +1,41 @@
 const priceElement = document.getElementById('price');
 
 // Customizable settings
-const showDecimals = false; // Change to true if you want to show decimals
+const showDecimals = false;
 
 let lastPrice = null;
 
 async function fetchPrice() {
     try {
-        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+        const response = await fetch('https://contract.mexc.com/api/v1/contract/index_price/BTC_USDT');
         const data = await response.json();
-        let price = parseFloat(data.price);
 
+        // Extract and process the price from the MEXC response
+        let price = parseFloat(data.data[0].p); 
         if (!showDecimals) {
             price = Math.floor(price);
         }
 
-        // Format the price with commas
+        // Format price and update color
         const formattedPrice = price.toLocaleString();
-
-        // Update the color based on price movement
         if (lastPrice !== null) {
             if (price > lastPrice) {
-                priceElement.style.color = 'rgb(69, 151, 130)'; // Custom green color
+                priceElement.style.color = 'rgb(69, 151, 130)';
             } else if (price < lastPrice) {
-                priceElement.style.color = 'rgb(223, 72, 76)'; // Custom red color
+                priceElement.style.color = 'rgb(223, 72, 76)';
             } else {
-                priceElement.style.color = 'rgb(69, 151, 130)'; // Custom green color
+                priceElement.style.color = 'rgb(69, 151, 130)';
             }
         }
-
+        
         priceElement.textContent = formattedPrice;
         lastPrice = price;
-
     } catch (error) {
         priceElement.textContent = 'Error fetching price';
         console.error('Error fetching price:', error);
     }
 }
 
-// Initial fetch and interval setup
+// Initial fetch and interval
 fetchPrice();
-setInterval(fetchPrice, 200); // Fetch price every 200 milliseconds
+setInterval(fetchPrice, 200);
