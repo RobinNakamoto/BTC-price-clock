@@ -1,23 +1,27 @@
 const priceElement = document.getElementById('price');
-
-// Customizable settings
-const showDecimals = false;
-
+const showDecimals = false; 
 let lastPrice = null;
 
 async function fetchPrice() {
     try {
-        const response = await fetch('https://contract.mexc.com/api/v1/contract/index_price/BTC_USDT');
-        const data = await response.json();
+        const proxyUrl = 'https://api.allorigins.win/get?url='; 
+        const apiUrl = 'https://contract.mexc.com/api/v1/contract/index_price/BTC_USDT';
+        const response = await fetch(`${proxyUrl}${encodeURIComponent(apiUrl)}`);
 
-        // Extract and process the price from the MEXC response
-        let price = parseFloat(data.data[0].p); 
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const mexcData = JSON.parse(data.contents);
+
+        let price = parseFloat(mexcData.data[0].p); 
         if (!showDecimals) {
             price = Math.floor(price);
         }
 
-        // Format price and update color
         const formattedPrice = price.toLocaleString();
+
         if (lastPrice !== null) {
             if (price > lastPrice) {
                 priceElement.style.color = 'rgb(69, 151, 130)';
@@ -31,11 +35,10 @@ async function fetchPrice() {
         priceElement.textContent = formattedPrice;
         lastPrice = price;
     } catch (error) {
-        priceElement.textContent = 'Error fetching price';
         console.error('Error fetching price:', error);
+        priceElement.textContent = 'Error fetching price';
     }
 }
 
-// Initial fetch and interval
 fetchPrice();
-setInterval(fetchPrice, 200);
+setInterval(fetchPrice, 200); // Or adjust as needed
